@@ -3,12 +3,11 @@ declare (strict_types = 1);
 
 namespace app\api\controller\v1;
 
+use app\api\model\Theme as ThemeModel;
 use app\api\validate\IDCollection;
 use app\api\validate\IDMustBePositiveInt;
 use app\BaseController;
 use app\lib\exception\ThemeException;
-use think\facade\Request;
-use app\api\model\Theme as ThemeModel;
 
 class Theme extends BaseController
 {
@@ -30,35 +29,10 @@ class Theme extends BaseController
         return $result;
     }
 
-    public function create()
-    {
-        //
-    }
-
-    public function save(Request $request)
-    {
-        //
-    }
-
     public function read($id)
     {
         (new IDMustBePositiveInt())->goCheck();
         $result = ThemeModel::getThemeWithProducts($id);
         return $result;
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function delete($id)
-    {
-        //
     }
 }

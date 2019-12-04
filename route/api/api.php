@@ -16,3 +16,4 @@ Route::resource(':version/theme', ':version.Theme')->only(['index', 'read']);
 Route::resource(':version/category', ':version.Category')->only(['index']);
 Route::get(':version/product/by_category', ':version.Product/by_category');
 Route::get(':version/product/recent', ':version.Product/recent');
+Route::post(':version/token/user', ':version.Token/getToken');
