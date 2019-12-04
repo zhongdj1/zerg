@@ -1,14 +1,15 @@
 <?php
-
+declare (strict_types = 1);
 
 namespace app\api\service;
 
 
 use app\api\model\User;
 use app\lib\exception\WeChatException;
+use app\lib\exception\TokenException;
 use think\Exception;
 
-class UserToken
+class UserToken extends Token
 {
     protected $code;
     protected $wxAppID;
@@ -54,11 +55,24 @@ class UserToken
             $uid = $this->newUser($openid);
         }
         $cachedValue = $this->prepareCachedValue($wxResult, $uid);
+        $token = $this->saveToCache($cachedValue);
+        return $token;
     }
 
     private function saveToCache($cachedValue)
     {
-        $key = generateToken();
+        $key = self::generateToken();
+        $value = json_decode($cachedValue);
+        $expire_in = config('setting.token_expire_in');
+        $request = cache($key, $value, $expire_in);
+        if (!$request) {
+            throw new TokenException([
+                'msg' => '服务器缓存异常',
+                'errorCode' => 10005
+            ]);
+        }
+
+        return $key;
     }
 
     private function prepareCachedValue($wxResult, $uid)
