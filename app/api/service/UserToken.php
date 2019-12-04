@@ -35,10 +35,9 @@ class UserToken extends Token
             if ($loginFail) {
                 $this->processLoginError($wxResult);
             } else {
-                $this->grantToken($wxResult);
+                return $this->grantToken($wxResult);
             }
         }
-        return $wxResult;
     }
 
     private function grantToken($wxResult)
