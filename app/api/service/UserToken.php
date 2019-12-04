@@ -4,6 +4,7 @@
 namespace app\api\service;
 
 
+use app\api\model\User;
 use app\lib\exception\WeChatException;
 use think\Exception;
 
@@ -46,7 +47,34 @@ class UserToken
         // 生成令牌，准备缓存数据，写入缓存
         // 把令牌返回到客户端
         $openid = $wxResult['openid'];
+        $user = User::getByOpenID($openid);
+        if ($user) {
+            $uid = $user->id;
+        } else {
+            $uid = $this->newUser($openid);
+        }
+        $cachedValue = $this->prepareCachedValue($wxResult, $uid);
+    }
 
+    private function saveToCache($cachedValue)
+    {
+        $key = generateToken();
+    }
+
+    private function prepareCachedValue($wxResult, $uid)
+    {
+        $cachedValue = $wxResult;
+        $cachedValue['uid'] = $uid;
+        $cachedValue['scope'] = 16;
+        return $cachedValue;
+    }
+
+    private function newUser($openid)
+    {
+        $user = User::create([
+            'openid' => $openid
+        ]);
+        return $user->id;
     }
 
     private function processLoginError($wxResult)
