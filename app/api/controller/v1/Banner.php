@@ -7,7 +7,6 @@ use app\api\model\Banner as BannerModel;
 use app\api\validate\IDMustBePositiveInt;
 use app\BaseController;
 use app\lib\exception\BannerMissException;
-use think\facade\Request;
 
 class Banner extends BaseController
 {
@@ -15,16 +14,11 @@ class Banner extends BaseController
     {
     }
 
-    public function create()
-    {
-        //
-    }
-
-    public function save(Request $request)
-    {
-        //
-    }
-
+    /**
+     * 根据id获取banner以及banner下面的banner_item
+     * @param $id
+     * @return array|\think\Model|null
+     */
     public function read($id)
     {
         (new IDMustBePositiveInt())->goCheck();
@@ -33,20 +27,5 @@ class Banner extends BaseController
             throw new BannerMissException();
         }
         return $banner;
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function delete($id)
-    {
-        //
     }
 }

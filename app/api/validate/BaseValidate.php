@@ -14,7 +14,6 @@ class BaseValidate extends Validate
         // 接收参数 -> 检验参数
         $request = Request::instance();
         $params = $request->param();
-
         $result = $this->batch()->check($params);
         if (!$result) {
             $e = new ParameterException([
@@ -23,6 +22,16 @@ class BaseValidate extends Validate
             throw $e;
         } else {
             return true;
+        }
+    }
+
+
+    protected function isPositiveInteger($value, $rule='', $data = [], $field = '')
+    {
+        if (is_numeric($value) && is_int($value + 0) && ($value + 0) > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

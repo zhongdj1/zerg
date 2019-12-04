@@ -3,16 +3,31 @@ declare (strict_types = 1);
 
 namespace app\api\controller\v1;
 
-use app\api\model\Banner as BannerModel;
+use app\api\validate\IDCollection;
 use app\api\validate\IDMustBePositiveInt;
 use app\BaseController;
-use app\lib\exception\BannerMissException;
+use app\lib\exception\ThemeException;
 use think\facade\Request;
+use app\api\model\Theme as ThemeModel;
 
-class Banner extends BaseController
+class Theme extends BaseController
 {
-    public function index()
+    /**
+     * 根据主题id获取主题以及对应的图片
+     * @param string $ids 1,2,3
+     * @return string
+     * @throws \app\lib\exception\ParameterException
+     */
+    public function index($ids='')
     {
+        (new IDCollection())->goCheck();
+        $ids = explode(',', $ids);
+        $result = ThemeModel::with(['topicImg', 'headImg'])
+            ->select($ids);
+        if ($result->isEmpty()) {
+            throw new ThemeException();
+        }
+        return $result;
     }
 
     public function create()
@@ -28,11 +43,8 @@ class Banner extends BaseController
     public function read($id)
     {
         (new IDMustBePositiveInt())->goCheck();
-        $banner = BannerModel::getBannerByID($id);
-        if (!$banner) {
-            throw new BannerMissException();
-        }
-        return $banner;
+        $result = ThemeModel::getThemeWithProducts($id);
+        return $result;
     }
 
     public function edit($id)
