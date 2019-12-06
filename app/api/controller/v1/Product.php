@@ -40,4 +40,14 @@ class Product extends BaseController
         }
         return $products;
     }
+
+    public function detail($id)
+    {
+        (new IDMustBePositiveInt())->goCheck();
+        $product = ProductModel::getProduct($id);
+        if (!$product) {
+            throw new ProductException();
+        }
+        return $product;
+    }
 }

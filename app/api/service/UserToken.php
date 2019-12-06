@@ -31,7 +31,7 @@ class UserToken extends Token
         if (empty($wxResult)) {
             throw new Exception('微信内部错误');
         } else {
-            $loginFail = array_key_exists('errorCode', $wxResult);
+            $loginFail = array_key_exists('errcode', $wxResult);
             if ($loginFail) {
                 $this->processLoginError($wxResult);
             } else {
@@ -61,7 +61,7 @@ class UserToken extends Token
     private function saveToCache($cachedValue)
     {
         $key = self::generateToken();
-        $value = json_decode($cachedValue);
+        $value = json_encode($cachedValue);
         $expire_in = config('setting.token_expire_in');
         $request = cache($key, $value, $expire_in);
         if (!$request) {
