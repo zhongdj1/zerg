@@ -16,7 +16,7 @@ class Product extends BaseController
      * 根据category_id查找该分类下的商品列表
      * @param $id 分类id
      */
-    public function by_category($id)
+    public function byCategory($id)
     {
         (new IDMustBePositiveInt())->goCheck();
         $products = ProductModel::getProductsByCategoryID($id);
