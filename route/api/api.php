@@ -14,7 +14,7 @@ use think\facade\Route;
 Route::resource(':version/banner', ':version.Banner')->only(['read']);
 Route::resource(':version/theme', ':version.Theme')->only(['index', 'read']);
 Route::resource(':version/category', ':version.Category')->only(['index']);
-Route::post(':version/address', ':version.Address/createOrUpdate');
+Route::post(':version/address', ':version.Address/createOrUpdate')->middleware(\app\middleware\Auth::class);;
 //Route::get(':version/product/:id', ':version.Product/detail')->pattern(['id' => '\d+']);
 //Route::get(':version/product/by_category', ':version.Product/by_category');
 //Route::get(':version/product/recent', ':version.Product/recent');
@@ -25,3 +25,4 @@ Route::group(':version/product/', function () {
     Route::get('by_category', ':version.Product/byCategory');
     Route::get('recent', ':version.Product/recent');
 });
+

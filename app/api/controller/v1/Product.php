@@ -50,4 +50,9 @@ class Product extends BaseController
         }
         return $product;
     }
+
+    public function delete($id)
+    {
+
+    }
 }
